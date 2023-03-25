@@ -208,6 +208,9 @@ exports.deleteSingleEvent = async(req,res,next)=>{
 //Get Alumnus
 exports.getAlumnus = async(req,res,next)=>{
     try {
+        //Page
+        const page = req.query.page
+
         //Get Alumnus
         const alumnus = await Head.getAllAlumnus();
 

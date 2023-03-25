@@ -142,13 +142,13 @@ exports.login = async(req,res,next)=>{
         const alumni = await Alumni.alumniLogin(email);
 
        // Check if alumni exists
-        if(!alumni) return next(new AppError('Wrong email or password',400));
+        if(!alumni) return next(new AppError('Wrong email or password',401));
 
         //Get the alumni account
         const account = await Alumni.getAlumiAccount(alumni.account)
        
         //Check if password is correct
-        if(!comparePassword(password.toString(),account.password)) return next(new AppError('Wrong email or password'))
+        if(!comparePassword(password.toString(),account.password)) return next(new AppError('Wrong email or password',401))
 
         //Create token
         const alumniToken = createToken({id: alumni.id, role:"Alumni"});
