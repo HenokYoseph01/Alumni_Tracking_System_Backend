@@ -23,10 +23,10 @@ exports.login = async(req,res,next)=>{
         const user = await Login.userLogin(email);
 
        // Check if alumni exists
-        if(!user) return next(new AppError('Wrong email or password',400));
+        if(!user) return next(new AppError('Wrong email or password',401));
        
         //Check if password is correct
-        if(!comparePassword(password.toString(),user.password)) return next(new AppError('Wrong email or password',400))
+        if(!comparePassword(password.toString(),user.password)) return next(new AppError('Wrong email or password',401))
 
         //Create token variable
         let userToken;
