@@ -26,7 +26,7 @@ exports.login = async(req,res,next)=>{
         if(!user) return next(new AppError('Wrong email or password',400));
        
         //Check if password is correct
-        if(!comparePassword(password.toString(),user.password)) return next(new AppError('Wrong email or password'))
+        if(!comparePassword(password.toString(),user.password)) return next(new AppError('Wrong email or password',400))
 
         //Create token variable
         let userToken;
