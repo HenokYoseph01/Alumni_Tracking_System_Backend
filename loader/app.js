@@ -16,12 +16,18 @@ const loginRouter = require('../api/login/router')
 //Create app
 const app = express();
 
-//Cors options
+
+const whitelist = ["http://localhost:3000","https://alumni-track-system-kr9h.onrender.com"];
 const corsOptions = {
-    origin: ["https://alumni-track-system-kr9h.onrender.com"],
-    optionSuccessStatus: 200
+  origin: function (origin, callback) {
+    if (!origin || whitelist.indexOf(origin) !== -1) {
+      callback(null, true)
+    } else {
+      callback(new Error("Not allowed by CORS"))
+    }
+  },
+  credentials: true,
 }
-//Add cors for api use in frontend
 app.use(cors(corsOptions))
 
 
