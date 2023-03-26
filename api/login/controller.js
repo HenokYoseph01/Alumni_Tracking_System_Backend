@@ -17,16 +17,16 @@ exports.login = async(req,res,next)=>{
         const {email,password} = req.body;
 
         //Check if email or password has been provided
-        if(!email||!password) return next(new AppError("Please fill all required fields",400))
+        if(!email||!password) throw new Error("Please enter Required Fields");
 
         //Get alumni
         const user = await Login.userLogin(email);
 
        // Check if alumni exists
-        if(!user) return next(new AppError('Wrong email or password',401));
+        if(!user) throw new Error("Wrong Credentials");
        
         //Check if password is correct
-        if(!comparePassword(password.toString(),user.password)) return next(new AppError('Wrong email or password',401))
+        if(!comparePassword(password.toString(),user.password)) throw new Error("Wrong Credentials")
 
         //Create token variable
         let userToken;
@@ -53,6 +53,8 @@ exports.login = async(req,res,next)=>{
         })
 
     } catch (error) {
-        next(error)
+        res.status(400).json({
+            error
+        })
     }
 }

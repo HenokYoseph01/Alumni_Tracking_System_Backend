@@ -31,6 +31,7 @@ app.use('/api/v1/alumni',alumniRouter);
 app.use('/api/v1/admin',adminRouter);
 app.use('/api/v1/head', headRouter);
 app.use('/api/v1/login',loginRouter);
+
 //Use global error handler
 app.use(geh)
 
