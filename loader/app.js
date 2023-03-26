@@ -16,8 +16,13 @@ const loginRouter = require('../api/login/router')
 //Create app
 const app = express();
 
+//Cors options
+const corsOptions = {
+    origin: ["https://alumni-track-system-kr9h.onrender.com"],
+    optionSuccessStatus: 200
+}
 //Add cors for api use in frontend
-app.use(cors("https://alumni-track-system-kr9h.onrender.com"))
+app.use(cors(corsOptions))
 
 
 //Add in the body parser
