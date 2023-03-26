@@ -662,15 +662,17 @@ exports.updateProfle = async(req,res,next)=>{
 exports.getAlumniProfile = async(req,res,next)=>{
     try {
         //Get alumni
-        const alumni = await Alumni.getSingleAlumniForProfile(req.user.id);
-
+        //const alumni = await Alumni.getSingleAlumniForProfile(req.user.id);
+        throw new Error('False')
         //Response
         res.status(200).json({
             status:'SUCCESS',
             data:{alumni}
         })
     } catch (error) {
-        next(error)
+        res.status(400).json({
+            status:'SUCCESS'
+        })
     }
 }
 
