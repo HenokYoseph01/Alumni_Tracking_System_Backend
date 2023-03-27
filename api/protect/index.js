@@ -19,6 +19,7 @@ const Head = require('../head/DAL');
 //Middleware
 const protect = async(req,res,next)=>{
     try{
+        console.log('Hello')
         //Token
         let token;
 
@@ -27,9 +28,10 @@ const protect = async(req,res,next)=>{
             && req.headers.authorization.split(" ")[0] === "Bearer"){
                 token = req.headers.authorization.split(" ")[1];
             }
-        
+        console.log('Hello')
         //Check if there is a token
         if(!token) return next(new AppError("Please Login",400));
+        console.log('Hello')
         //Decoded data
         const decodedData = verifyToken(token);
         

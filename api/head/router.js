@@ -11,7 +11,7 @@ const protect = require('../protect')
 const headController = require('./controller');
 
 //Routers
-router.post('/login',headController.login)
+
 
 router.route('/')
 .get(protect,headController.getHeadProfile)

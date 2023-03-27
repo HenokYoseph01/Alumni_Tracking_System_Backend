@@ -130,44 +130,6 @@ exports.uploadPhoto = async(req,res,next)=>{
     }
 }
 
-exports.login = async(req,res,next)=>{
-    try {
-        //Get input from body
-        const {email,password} = req.body;
-
-        //Check if email or password has been provided
-        if(!email||!password) return next(new AppError("Please fill all required fields",400))
-
-        //Get alumni
-        const alumni = await Alumni.alumniLogin(email);
-
-       // Check if alumni exists
-        if(!alumni) return next(new AppError('Wrong email or password',401));
-
-        //Get the alumni account
-        const account = await Alumni.getAlumiAccount(alumni.account)
-       
-        //Check if password is correct
-        if(!comparePassword(password.toString(),account.password)) return next(new AppError('Wrong email or password',401))
-
-        //Create token
-        const alumniToken = createToken({id: alumni.id, role:"Alumni"});
-
-        //Response
-        res.status(200).json({
-            status:"SUCCESS",
-            message: "Successfully logged in",
-            data: {
-                alumni
-            },
-            alumniToken
-        })
-
-    } catch (error) {
-        next(error)
-    }
-}
-
 //Create Forum
 exports.createForum = async(req,res,next)=>{
     try {
@@ -661,6 +623,7 @@ exports.updateProfle = async(req,res,next)=>{
 //Get Alumni
 exports.getAlumniProfile = async(req,res,next)=>{
     try {
+        console.log('Test')
         //Get alumni
         const alumni = await Alumni.getSingleAlumniForProfile(req.user.id);
         
