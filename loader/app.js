@@ -18,7 +18,7 @@ const app = express();
 
 
 //Add cors for api use in frontend
-app.use(cors("https://alumni-track-system-kr9h.onrender.com"))
+app.use(cors())
 
 
 //Add in the body parser

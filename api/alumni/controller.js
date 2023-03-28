@@ -623,7 +623,6 @@ exports.updateProfle = async(req,res,next)=>{
 //Get Alumni
 exports.getAlumniProfile = async(req,res,next)=>{
     try {
-        console.log('Test')
         //Get alumni
         const alumni = await Alumni.getSingleAlumniForProfile(req.user.id);
         
