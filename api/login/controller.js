@@ -19,7 +19,6 @@ exports.login = async(req,res,next)=>{
         //Check if email or password has been provided
         if(!email||!password) return next(new AppError("Please enter Required Fields",400));
 
-        
         //Get alumni
         const user = await Login.userLogin(email);
 
