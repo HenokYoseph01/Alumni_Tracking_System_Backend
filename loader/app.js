@@ -8,9 +8,9 @@ const geh = require('../api/geh')
 const cors = require('cors')
 
 //Get routers
-const alumniRouter = require('../api/alumni/router');
-const adminRouter = require('../api/admin/router');
-const headRouter = require('../api/head/router');
+// const alumniRouter = require('../api/alumni/router');
+// const adminRouter = require('../api/admin/router');
+// const headRouter = require('../api/head/router');
 const loginRouter = require('../api/login/router')
 
 //Create app
@@ -27,9 +27,9 @@ app.use(express.urlencoded({ extended: false }));
 
 
 //Use routers
-app.use('/api/v1/alumni',alumniRouter);
-app.use('/api/v1/admin',adminRouter);
-app.use('/api/v1/head', headRouter);
+// app.use('/api/v1/alumni',alumniRouter);
+// app.use('/api/v1/admin',adminRouter);
+// app.use('/api/v1/head', headRouter);
 app.use('/api/v1/login',loginRouter);
 
 //Use global error handler
