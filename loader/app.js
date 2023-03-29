@@ -18,7 +18,7 @@ const app = express();
 
 
 //Add cors for api use in frontend
-app.use(cors())
+app.options('*', cors())
 
 
 //Add in the body parser
