@@ -21,8 +21,6 @@ const app = express();
 app.use(cors())
 
 
-
-
 //Add in the body parser
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
