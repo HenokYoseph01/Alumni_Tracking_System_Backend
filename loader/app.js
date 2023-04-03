@@ -11,7 +11,8 @@ const cors = require('cors')
 const alumniRouter = require('../api/alumni/router');
 const adminRouter = require('../api/admin/router');
 const headRouter = require('../api/head/router');
-const loginRouter = require('../api/login/router')
+const loginRouter = require('../api/login/router');
+const guestRouter = require('../api/guest/router')
 
 //Create app
 const app = express();
@@ -31,6 +32,7 @@ app.use('/api/v1/alumni',alumniRouter);
 app.use('/api/v1/admin',adminRouter);
 app.use('/api/v1/head', headRouter);
 app.use('/api/v1/login',loginRouter);
+app.use('/api/v1/guest',guestRouter);
 
 //Use global error handler
 app.use(geh)
