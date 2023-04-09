@@ -128,15 +128,16 @@ class Head{
     }
 
     //Get all events
-    static async getAllEvent(){
+    static async getAllEvent(page){
         try {
           
             //text
-            const text = `SELECT * FROM announcement`
+            const text = `SELECT * FROM announcement LIMIT 5 OFFSET $1`
             //Get event
             const {rows} = await pool.query({
                 name:'get_all_event',
-                text
+                text,
+                values:[page]
             })
             //return value
             return rows;
@@ -198,15 +199,19 @@ class Head{
     }
 
     //Get Alumnus
-    static async getAllAlumnus(){
+    static async getAllAlumnus(page){
         try {
             //Text
-            const text = `SELECT * from alumni ORDER BY "first_name", "last_name","grandfather_name"`
+            const text = `SELECT * from alumni 
+            ORDER BY "first_name", "last_name","grandfather_name"
+            LIMIT 10
+            OFFSET $1`
 
             //Get Alumnus
             const {rows} = await pool.query({
                 name: 'get_all_alumnus',
-                text
+                text,
+                values:[page]
             });
             //return values
             return rows 
@@ -495,19 +500,21 @@ class Head{
     }
 
     //Search Specfic Alumni(s)
-    static async searchAlumni(data){
+    static async searchAlumni(data,page){
         try {
             //text
             const text = `
-            SELECT first_name, last_name, grandfather_name,GPA,occupation 
+            SELECT id, first_name, last_name, grandfather_name,GPA,occupation,date_of_graduation 
             FROM alumni
             WHERE to_tsvector(COALESCE(first_name,' ')||' '||COALESCE(last_name,' ')||' '||COALESCE(grandfather_name,' ')||' '||
-            GPA||COALESCE(occupation,' ')) @@ to_tsquery($1)`
+            GPA||COALESCE(occupation,' '))||' '||date_of_graduation @@ to_tsquery($1)
+            LIMIT 2
+            OFFSET $2`
 
             const{rows} = await pool.query({
                 name: 'search_alumni',
                 text,
-                values:[data]
+                values:[data,page]
             })
             //return value
             return rows;

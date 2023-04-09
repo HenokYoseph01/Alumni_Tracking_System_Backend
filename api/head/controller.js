@@ -18,12 +18,19 @@ const writeExcel = require('../../utils/writeReport');
 //Get all Events
 exports.getAllEvent = async(req,res,next)=>{
     try {
+         //Page
+         let page = req.query.page
+         if(!page) page = 1;
+         
+
         //Get all events
-        const events = await Head.getAllEvent();
+        const events = await Head.getAllEvent((page-1)*5);
         
         //Response
         res.status(200).json({
             status:"SUCCESS",
+            length: events.length,
+            page,
             data:{events}
         })
     } catch (error) {
@@ -171,14 +178,18 @@ exports.deleteSingleEvent = async(req,res,next)=>{
 exports.getAlumnus = async(req,res,next)=>{
     try {
         //Page
-        const page = req.query.page
-
+        let page = req.query.page
+        if(!page) page = 1;
+        const pageNum = page
+        
         //Get Alumnus
-        const alumnus = await Head.getAllAlumnus();
+        const alumnus = await Head.getAllAlumnus((page-1)*10);
 
         //Response
         res.status(200).json({
             status:'SUCCESS',
+            length: alumnus.length,
+            page: pageNum,
             data:{alumnus}
         })
     } catch (error) {
@@ -245,14 +256,20 @@ exports.findSpecficItem = async(req,res,next)=>{
         let outcome;
         const categories = req.body.categories
         const search = req.body.search + ':*'
+         //Page
+         let page = req.query.page
+         if(!page) page = 1;
+         const pageNum = page
 
         if(search){
-            outcome = await Head.searchAlumni(search)
+            outcome = await Head.searchAlumni(search,(page-1)*2)
         }
 
         //Response
         res.status(200).json({
             status: "SUCCESS",
+            length: outcome.length,
+            page,
             data:{outcome}
         })
     } catch (error) {
