@@ -10,27 +10,30 @@ const protect = require('../protect')
 //Controllers
 const headController = require('./controller');
 
+//Authorization
+const authorize = require('../authorization');
+
 //Routers
 
 
 router.route('/')
-.get(protect,headController.getHeadProfile)
-.patch(protect,headController.updateHead)
+.get(protect,authorize('Head'),headController.getHeadProfile)
+.patch(protect,authorize('Head'),headController.updateHead)
 
 router.route('/event')
 .get(headController.getAllEvent)
-.post(protect,headController.createEvent)
-.delete(protect,headController.deleteAllEvent)
+.post(protect,authorize('Head'),headController.createEvent)
+.delete(protect,authorize('Head'),headController.deleteAllEvent)
 
 router.route('/event/:eventId')
-.get(headController.getSingleEvent)
-.patch(protect,headController.updateEvent)
-.delete(protect,headController.deleteSingleEvent)
+.get(protect,authorize('Head'),headController.getSingleEvent)
+.patch(protect,authorize('Head'),headController.updateEvent)
+.delete(protect,authorize('Head'),headController.deleteSingleEvent)
 
-router.get('/alumni',headController.getAlumnus)
-router.post('/generatereport',protect,headController.generateReport)
+router.get('/alumni',protect,authorize('Head'),headController.getAlumnus)
+router.post('/generatereport',protect,authorize('Head'),headController.generateReport)
 
-router.get('/specific',protect,headController.findSpecficItem)
+router.get('/specific',protect,authorize('Head'),headController.findSpecficItem)
 
 //Export router
 module.exports = router
