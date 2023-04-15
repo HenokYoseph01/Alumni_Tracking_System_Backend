@@ -24,7 +24,11 @@ const config = {
         cloud_name: process.env.CLOUD_NAME,
         cl_apiKey: process.env.CLOUD_API_KEY,
         cl_apiSecret: process.env.CLOUD_API_SECRET
-    }
+    },
+    sendgrid:{
+        api_key: process.env.MAILER_KEY,
+        sender: process.env.SENDER_ADDRESS
+      }
 }
 
 module.exports = config;

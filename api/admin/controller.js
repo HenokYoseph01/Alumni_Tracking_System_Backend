@@ -17,6 +17,9 @@ const bcrypt = require('bcrypt');
 const reader = require('../../utils/readExcel');
 const pool = require('../../loader/db');
 
+//Require mailer
+const mailer = require('../../utils/mailer');
+
 //Admin Controllers
 
 //Create Alumni Account
@@ -31,6 +34,7 @@ exports.createAlumniAccount = async(req,res,next)=>{
         //Loop through graduates and assign account 
        for(i in list){
         const data = {};
+        const options={};
         if(i === '0') continue
         for(j in list[i]){
             if(j === '0') continue
@@ -46,16 +50,19 @@ exports.createAlumniAccount = async(req,res,next)=>{
             }
         }
         //create random password for alumni account
-        const password = otp.generate(5,{lowerCaseAlphabets:false,upperCaseAlphabets:false,specialChars:false})
-        console.log(password)
+        const password = otp.generate(5,{lowerCaseAlphabets:false,upperCaseAlphabets:false,specialChars:false});
         //store password in data object
         data.password = await bcrypt.hash(password, 8);
         //Create alumni
-        const alumni = await Admin.createAlumniAccount(data)
+       // const alumni = await Admin.createAlumniAccount(data)
         //Send an email with the credentials and password to the alumni
-        /*Code*/
+        options.email = data.email,
+        options.username = data.email,
+        options.password = password 
+        //Send Email
+        await mailer(options);
         //Save in alumni_created_tab
-        alumni_created.push(alumni)
+        //alumni_created.push(alumni)
         
        }
        //Delete file from file path

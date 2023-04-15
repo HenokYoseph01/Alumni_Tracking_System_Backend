@@ -3,7 +3,6 @@ const config = require("../../config");
 
 // Send Development error
 const sendDevError = (err, res) => {
-  console.log(err.status,err.statusCode,err.message)
   res.status(err.statusCode).json({
     status: err.status,
     message: err.message,

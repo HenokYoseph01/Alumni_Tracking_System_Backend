@@ -23,7 +23,7 @@ exports.login = async(req,res,next)=>{
         const user = await Login.userLogin(email);
 
        // Check if alumni exists
-        if(!user) return next(new AppError("Wrong Credentials",400));
+        if(!user) throw Error('Wrong Credentials')//return next(new AppError("Wrong Credentials",400));
        
         //Check if password is correct
         if(!comparePassword(password.toString(),user.password)) return next(new AppError("Wrong Credentials",400));
@@ -53,6 +53,8 @@ exports.login = async(req,res,next)=>{
         })
 
     } catch (error) {
-        next(error)
+        res.status(400).json({
+            error:error.message
+        })
     }
 }
