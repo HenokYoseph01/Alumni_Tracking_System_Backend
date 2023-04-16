@@ -17,6 +17,15 @@ const geh = (err, req, res, next) => {
   err.status = err.status || "ERROR";
   err.statusCode = err.statusCode || 500;
 
+  res.header('Access-Control-Allow-Origin', '*');
+  res.header('Access-Control-Allow-Headers', '*');
+  //intercept the OPTIONS call so we don't double up on calls to the integration
+  if ('OPTIONS' === res.method) {
+    res.send(200);
+  } else {
+    next();
+  }
+
   // Handle error for development environment
   if (config.env === "development") {
     sendDevError(err, res);
