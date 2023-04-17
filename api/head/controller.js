@@ -262,7 +262,7 @@ exports.findSpecficItem = async(req,res,next)=>{
          const pageNum = page
 
         if(search){
-            outcome = await Head.searchAlumni(search,(page-1)*2)
+            outcome = await Head.searchAlumni(search,(page-1)*10)
         }
 
         //Response

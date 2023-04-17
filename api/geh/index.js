@@ -17,9 +17,6 @@ const geh = (err, req, res, next) => {
   err.status = err.status || "ERROR";
   err.statusCode = err.statusCode || 500;
 
-  res.header('Access-Control-Allow-Origin', '*');
-  res.header('Access-Control-Allow-Headers', '*');
-  
 
   // Handle error for development environment
   if (config.env === "development") {

@@ -508,7 +508,7 @@ class Head{
             FROM alumni
             WHERE to_tsvector(COALESCE(first_name,' ')||' '||COALESCE(last_name,' ')||' '||COALESCE(grandfather_name,' ')||' '||
             GPA||COALESCE(occupation,' '))||' '||date_of_graduation @@ to_tsquery($1)
-            LIMIT 2
+            LIMIT 10
             OFFSET $2`
 
             const{rows} = await pool.query({

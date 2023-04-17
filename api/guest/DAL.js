@@ -4,15 +4,16 @@ const pool = require('../../loader/db');
 
 class Guest{
     //Get all events
-    static async getAllEvent(){
+    static async getAllEvent(data){
         try {
         
             //text
-            const text = `SELECT * FROM announcement WHERE viewable = 'Public'`
+            const text = `SELECT * FROM announcement WHERE viewable = 'Public' LIMIT 5 OFFSET $1`
             //Get event
             const {rows} = await pool.query({
                 name:'get_all_event_public',
-                text
+                text,
+                values:[data]
             })
             //return value
             return rows;
@@ -40,14 +41,18 @@ class Guest{
     }
 
     //Get minimum alumni info
-    static async getMinimumAlumniInfo(){
+    static async getMinimumAlumniInfo(year){
         try {
             //text
-            const text = `SELECT id, first_name, last_name,grandfather_name,photo_url FROM alumni`
+            const text = `SELECT id, first_name, 
+            last_name,grandfather_name,photo_url 
+            FROM alumni
+            WHERE date_of_graduation = $1`
             //Get event
             const {rows} = await pool.query({
                 name:'get_alumni_public',
-                text
+                text,
+                values:[year]
             })
             //return value
             return rows;
