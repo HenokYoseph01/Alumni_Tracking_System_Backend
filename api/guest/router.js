@@ -10,6 +10,6 @@ const guestController = require('./controller')
 
 router.get('/event',guestController.getAllEvents)
 router.get('/event/:eventId',guestController.getSingleEvent)
-router.get('/alumni',guestController.getMinimumAlumniInfo)
+router.get('/alumni/:alumniId',guestController.getMinimumAlumniInfo)
 
 module.exports = router;

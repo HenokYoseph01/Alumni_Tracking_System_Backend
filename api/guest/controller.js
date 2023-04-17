@@ -54,11 +54,7 @@ exports.getSingleEvent = async(req,res,next)=>{
 //Get minimum data of alumni 
 exports.getMinimumAlumniInfo = async(req,res,next)=>{
     try {
-        //Get year
-        const {year} = req.body;
-
-        if(!year) throw Error('Please provide a year');
-
+        const year = req.params.alumniId;
         //Get minimum info about alumni
          const alumni = await Guest.getMinimumAlumniInfo(year);
 
