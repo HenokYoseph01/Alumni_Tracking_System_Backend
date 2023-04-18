@@ -368,7 +368,7 @@ class Alumni{
             //Query
             const text = 
             `
-            SELECT replier_name, description FROM alumni_replies
+            SELECT id, replier_name, description FROM alumni_replies
             WHERE forum_id = $1
             `
 
