@@ -370,6 +370,7 @@ class Alumni{
             `
             SELECT id, replier_name, description FROM alumni_replies
             WHERE forum_id = $1
+            ORDER BY created_at DESC
             `
 
             //Execute query
