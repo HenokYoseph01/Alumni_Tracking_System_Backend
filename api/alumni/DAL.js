@@ -168,7 +168,7 @@ class Alumni{
                 name:'get_single_alumni_profile',
                 text: `
                 SELECT id, first_name, last_name, grandfather_name, place_of_work, occupation,
-                GPA, phone_number,email, gender, date_of_graduation, photo_url
+                GPA, phone_number,email, gender, date_of_graduation, photo_url, registered
                  FROM alumni WHERE id = $1`,
                 values:[data]
             })
@@ -519,7 +519,7 @@ class Alumni{
         try {
           
             //text
-            const text = `SELECT * FROM announcement`
+            const text = `SELECT * FROM announcement ORDER BY created_at DESC`
             //Get event
             const {rows} = await pool.query({
                 name:'get_all_event_alumni',
