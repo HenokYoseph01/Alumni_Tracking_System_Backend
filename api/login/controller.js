@@ -49,6 +49,7 @@ exports.login = async(req,res,next)=>{
         res.status(200).json({
             status:"SUCCESS",
             message: "Successfully logged in",
+            role: user.role,
             userToken
         })
 

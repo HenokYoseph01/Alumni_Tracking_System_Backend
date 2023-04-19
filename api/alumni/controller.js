@@ -67,9 +67,9 @@ exports.register = async(req,res,next)=>{
                 !attainment||
                 !category_of_work||
                 !satisfaction
-                ) return next(new AppError('Please provide needed data',400))
+                ) throw Error('Please provide needed data')
 
-               if(req.user.registered) return next(new AppError('You have already registered',400));
+               if(req.user.registered) throw Error('You have already registered');
                 //data variable to hold all data
                 const data = req.body;
                 data.alumniId = req.user.id
@@ -88,7 +88,9 @@ exports.register = async(req,res,next)=>{
             //Move to next middleware
               next();
     } catch (error) {
-        next(error)
+        res.status(400).json({
+            error:error.message
+        })
     }
 }
 
@@ -120,13 +122,15 @@ exports.uploadPhoto = async(req,res,next)=>{
                 message: 'Successfully Registered',
                 data:{register}
                 })
-            }).catch(err=>{return next(new AppError('Issue with registration',400))})
+            }).catch(err=>{throw Error('Issue with registration')})
           
             
-        }).catch(err=>{return next(new AppError('Problem with uploading picture',500))})
+        }).catch(err=> {throw Error('Problem with uploading picture')})
         
     } catch (error) {
-        next(error)
+        res.status(400).json({
+            error:error.message
+        })
     }
 }
 
@@ -134,13 +138,13 @@ exports.uploadPhoto = async(req,res,next)=>{
 exports.createForum = async(req,res,next)=>{
     try {
         //Check if user is banned from forum
-        if(req.user.banned) return next(new AppError("The user has been banned from using the discussion forum",400));
+        if(req.user.banned) throw Error ("The user has been banned from using the discussion forum");
         
         //Get data from body
         const data = req.body;
 
         //Check if all fields are provide
-        if(!data.title||!data.description) return next(new AppError("Please fill in require values",400));
+        if(!data.title||!data.description) throw Error ("Please fill in require values");
 
         //Get authors name from req.user
         data.author = req.user.first_name + ' ' + req.user.last_name;
@@ -158,7 +162,9 @@ exports.createForum = async(req,res,next)=>{
             data:{forum}
         })
     } catch (error) {
-        next(error)
+        res.status(400).json({
+            error:error.message
+        })
     }
 }
 
@@ -167,7 +173,7 @@ exports.getAllForum = async(req,res,next)=>{
     try {
         
         //Check if user is banned from forum
-        if(req.user.banned) return next(new AppError("The user has been banned from using the discussion forum",400));
+        if(req.user.banned) throw Error("The user has been banned from using the discussion forum");
 
         //Get all forum
         const forums = await Alumni.getAllForum();
@@ -186,7 +192,7 @@ exports.getAllForum = async(req,res,next)=>{
 exports.getAuthorForum = async(req,res,next)=>{
     try {
         //Check if user is banned from forum
-        if(req.user.banned) return next(new AppError("The user has been banned from using the discussion forum",400));
+        if(req.user.banned) throw Error("The user has been banned from using the discussion forum");
 
         //Get author forum
         const forums = await Alumni.getAuthorForum(req.user.id);
@@ -197,7 +203,9 @@ exports.getAuthorForum = async(req,res,next)=>{
             data:{forums}
         })
     } catch (error) {
-        next(error)
+        res.status(400).json({
+            error:error.message
+        })
     }
 }
 
@@ -205,7 +213,7 @@ exports.getAuthorForum = async(req,res,next)=>{
 exports.updateForum = async(req,res,next)=>{
     try {
         //Check if user is banned from forum
-        if(req.user.banned) return next(new AppError("The user has been banned from using the discussion forum",400));
+        if(req.user.banned) throw Error("The user has been banned from using the discussion forum");
 
         //Get forum id from params
         const forumId = req.params.forumId;
@@ -213,9 +221,9 @@ exports.updateForum = async(req,res,next)=>{
         const check = await Alumni.getSingleForum(forumId);
 
         //Check if post exists
-        if(!check) return next(new AppError('Post does not exist',400));
+        if(!check) throw Error('Post does not exist');
         //Check if user is actual author of post
-        if(check.author_id !== req.user.id) return next(new AppError('Unauthorized access',400));
+        if(check.author_id !== req.user.id) throw Error('Unauthorized access');
 
         //get data from body
         const data = req.body
@@ -233,7 +241,9 @@ exports.updateForum = async(req,res,next)=>{
             data:{forum}
         })
     } catch (error) {
-        next(error)
+        res.status(400).json({
+            error:error.message
+        })
     }
 }
 
@@ -241,7 +251,7 @@ exports.updateForum = async(req,res,next)=>{
 exports.deleteForum = async(req,res,next)=>{
     try {
         //Check if user is banned from forum
-        if(req.user.banned) return next(new AppError("The user has been banned from using the discussion forum",400));
+        if(req.user.banned) throw Error("The user has been banned from using the discussion forum");
 
         //Get forum id from params
         const forumId = req.params.forumId;
@@ -249,9 +259,9 @@ exports.deleteForum = async(req,res,next)=>{
         const check = await Alumni.getSingleForum(forumId);
 
         //Check if post exists
-        if(!check) return next(new AppError('Post does not exist',400));
+        if(!check) throw Error('Post does not exist');
         //Check if user is actual author of post
-        if(check.author_id !== req.user.id) return next(new AppError('Unauthorized access',400));
+        if(check.author_id !== req.user.id) throw Error ('Unauthorized access');
 
         //Delete Forum
         await Alumni.deleteForum(forumId);
@@ -262,7 +272,9 @@ exports.deleteForum = async(req,res,next)=>{
             message: 'Post has been successfully deleted'
         })
     } catch (error) {
-        next(error)
+        res.status(400).json({
+            error:error.message
+        })
     }
 }
 
@@ -270,7 +282,7 @@ exports.deleteForum = async(req,res,next)=>{
 exports.replyForum = async(req,res,next)=>{
     try {
         //Check if user is banned from forum
-        if(req.user.banned) return next(new AppError("The user has been banned from using the discussion forum",400));
+        if(req.user.banned) throw Error ("The user has been banned from using the discussion forum");
 
         //Get forum id from params
         const forumId = req.params.forumId;
@@ -279,13 +291,13 @@ exports.replyForum = async(req,res,next)=>{
         const check = await Alumni.getSingleForum(forumId);
 
          //Check if post exists
-         if(!check) return next(new AppError('Post does not exist',400));
+         if(!check) throw Error ('Post does not exist');
         
          //Get data
          const data = req.body
 
          //Check if user has provided require value
-         if(!data.description) return next(new AppError("Please fill in require values",400));
+         if(!data.description) throw Error ("Please fill in require values");
 
          //Assing data the value of the forum id
          data.forum_id = forumId;
@@ -307,7 +319,9 @@ exports.replyForum = async(req,res,next)=>{
          })
          
     } catch (error) {
-        next(error)
+        res.status(400).json({
+            error:error.message
+        })
     }
 }
 
@@ -341,7 +355,7 @@ exports.replyForum = async(req,res,next)=>{
 exports.getReplyToForum = async(req,res,next)=>{
     try {
         //Check if user is banned from forum
-        if(req.user.banned) return next(new AppError("The user has been banned from using the discussion forum",400));
+        if(req.user.banned) throw Error ("The user has been banned from using the discussion forum");
 
         //Get forum id from params
         const forumId = req.params.forumId;
@@ -350,7 +364,7 @@ exports.getReplyToForum = async(req,res,next)=>{
         const check = await Alumni.getSingleForum(forumId);
 
          //Check if post exists
-         if(!check) return next(new AppError('Post does not exist',400));
+         if(!check) throw Error ('Post does not exist');
 
          //Reply to forum
          const replies = await Alumni.getAllRepliesToForum(forumId);
@@ -363,7 +377,9 @@ exports.getReplyToForum = async(req,res,next)=>{
          })
          
     } catch (error) {
-        next(error)
+        res.status(400).json({
+            error:error.message
+        })
     }
 }
 
@@ -371,7 +387,7 @@ exports.getReplyToForum = async(req,res,next)=>{
 exports.getSingleForum = async(req,res,next)=>{
     try {
         //Check if user is banned from forum
-        if(req.user.banned) return next(new AppError("The user has been banned from using the discussion forum",400));
+        if(req.user.banned) throw Error("The user has been banned from using the discussion forum");
 
         //Get forum id from params
         const forumId = req.params.forumId;
@@ -380,7 +396,7 @@ exports.getSingleForum = async(req,res,next)=>{
         const post = await Alumni.getSingleForum(forumId);
 
          //Check if post exists
-         if(!post) return next(new AppError('Post does not exist',400));
+         if(!post) throw Error('Post does not exist');
 
          //Response
          res.status(200).json({
@@ -389,7 +405,9 @@ exports.getSingleForum = async(req,res,next)=>{
          })
          
     } catch (error) {
-        next(error)
+        res.status(400).json({
+            error:error.message
+        })
     }
 }
 
@@ -398,7 +416,7 @@ exports.getSingleForum = async(req,res,next)=>{
 exports.updateRepliesToForum = async(req,res,next)=>{
     try {
         //Check if user is banned from forum
-        if(req.user.banned) return next(new AppError("The user has been banned from using the discussion forum",400));
+        if(req.user.banned) throw Error("The user has been banned from using the discussion forum");
 
         //Get forum id from params
         const forumId = req.params.forumId;
@@ -407,7 +425,7 @@ exports.updateRepliesToForum = async(req,res,next)=>{
         const check = await Alumni.getSingleForum(forumId);
 
          //Check if post exists
-         if(!check) return next(new AppError('Post does not exist',400));
+         if(!check) throw Error('Post does not exist');
 
          //Get reply id from params
          const replyId = req.params.replyId;
@@ -415,11 +433,11 @@ exports.updateRepliesToForum = async(req,res,next)=>{
          //const check if reply exists
          const checkReply = await Alumni.getSingleReplyToForum(replyId);
 
-         if(!checkReply)return next(new AppError('Reply does not exist',400));
+         if(!checkReply)throw Error('Reply does not exist');
 
          //Check if reply belongs to replier
          if(req.user.id !== checkReply.replier_id) 
-         return next(new AppError('Unauthorized access',400));
+         throw Error('Unauthorized access');
 
          //Get data from body
          const data = req.body
@@ -437,7 +455,9 @@ exports.updateRepliesToForum = async(req,res,next)=>{
          })
          
     } catch (error) {
-        next(error)
+        res.status(400).json({
+            error:error.message
+        })
     }
 }
 
@@ -445,7 +465,7 @@ exports.updateRepliesToForum = async(req,res,next)=>{
 exports.deleteRepliesToForum = async(req,res,next)=>{
     try {
         //Check if user is banned from forum
-        if(req.user.banned) return next(new AppError("The user has been banned from using the discussion forum",400));
+        if(req.user.banned) throw Error("The user has been banned from using the discussion forum");
 
         //Get forum id from params
         const forumId = req.params.forumId;
@@ -454,7 +474,7 @@ exports.deleteRepliesToForum = async(req,res,next)=>{
         const check = await Alumni.getSingleForum(forumId);
 
          //Check if post exists
-         if(!check) return next(new AppError('Post does not exist',400));
+         if(!check) throw Error ('Post does not exist');
 
          //Get reply id from params
          const replyId = req.params.replyId;
@@ -462,11 +482,11 @@ exports.deleteRepliesToForum = async(req,res,next)=>{
          //const check if reply exists
          const checkReply = await Alumni.getSingleReplyToForum(replyId);
 
-         if(!checkReply)return next(new AppError('Reply does not exist',400));
+         if(!checkReply) throw Error ('Reply does not exist');
 
          //Check if reply belongs to replier
          if(req.user.id !== checkReply.replier_id) 
-         return next(new AppError('Unauthorized access',400));
+         throw Error('Unauthorized access');
 
          //Update reply
          await Alumni.deleteReplyToForum(replyId)
@@ -478,7 +498,9 @@ exports.deleteRepliesToForum = async(req,res,next)=>{
          })
          
     } catch (error) {
-        next(error)
+        res.status(400).json({
+            error:error.message
+        })
     }
 }
 
@@ -487,7 +509,7 @@ exports.deleteRepliesToForum = async(req,res,next)=>{
 exports.reportForum = async(req,res,next)=>{
     try {
         //Check if user is banned from forum
-        if(req.user.banned) return next(new AppError("The user has been banned from using the discussion forum",400));
+        if(req.user.banned) throw Error ("The user has been banned from using the discussion forum");
 
         //Get forum id from params
         const forumId = req.params.forumId;
@@ -496,16 +518,16 @@ exports.reportForum = async(req,res,next)=>{
         const check = await Alumni.getSingleForum(forumId);
 
          //Check if post exists
-         if(!check) return next(new AppError('Post does not exist',400));
+         if(!check) throw Error ('Post does not exist');
 
          //Check if user is actual author of post
-         if(check.author_id === req.user.id) return next(new AppError('User can not report themselves',400));
+         if(check.author_id === req.user.id) throw Error('User can not report themselves');
         
          //Get data
          const data = req.body
 
          //Check if user has provided require value
-         if(!data.description) return next(new AppError("Please fill in require values",400));
+         if(!data.description) throw Error ("Please fill in require values")
 
         //Assing data the value of the forum id
         data.forum_id = forumId;
@@ -528,7 +550,9 @@ exports.reportForum = async(req,res,next)=>{
             message:"Forum Reported Successfully",
         })
     } catch (error) {
-        next(error)
+        res.status(400).json({
+            error:error.message
+        })
     }
 }
 
@@ -536,7 +560,7 @@ exports.reportForum = async(req,res,next)=>{
 exports.getMinimumAlumniInfo = async(req,res,next)=>{
     try {
         //Check if user is banned from forum
-        if(req.user.banned) return next(new AppError("The user has been banned from using the discussion forum",400));
+        if(req.user.banned) throw Error ("The user has been banned from using the discussion forum");
         
         //Get forum id from params
         const forumId = req.params.forumId;
@@ -545,7 +569,7 @@ exports.getMinimumAlumniInfo = async(req,res,next)=>{
         const check = await Alumni.getSingleForum(forumId);
 
          //Check if post exists
-         if(!check) return next(new AppError('Post does not exist',400));
+         if(!check) throw Error ('Post does not exist');
 
          //Get minimum info about alumni
          const alumni = await Alumni.getMinimumAlumniInfo(check.author_id);
@@ -557,7 +581,9 @@ exports.getMinimumAlumniInfo = async(req,res,next)=>{
          })
          
     } catch (error) {
-        next(error)
+        res.status(400).json({
+            error:error.message
+        })
     }
 }
 
@@ -573,7 +599,9 @@ exports.getAllEvents = async(req,res,next)=>{
             data:{events}
         })
     } catch (error) {
-        next(error)
+        res.status(400).json({
+            error:error.message
+        })
     }
 }
 
@@ -587,7 +615,7 @@ exports.getSingleEvent = async(req,res,next)=>{
         const event = await Alumni.getSingleEvent(eventId)
 
         //Check if event exists
-        if(!event) return next(new AppError('Event does not exist',400));
+        if(!event) throw ('Event does not exist');
 
         //Response
         res.status(200).json({
@@ -595,7 +623,9 @@ exports.getSingleEvent = async(req,res,next)=>{
             data:{event}
         })
     } catch (error) {
-        next(error)
+        res.status(400).json({
+            error:error.message
+        })
     }
 }
 
@@ -616,7 +646,9 @@ exports.updateProfle = async(req,res,next)=>{
             data:{updatedProfile}
         })
     } catch (error) {
-        next(error)
+        res.status(400).json({
+            error:error.message
+        })
     }
 }
 
@@ -632,7 +664,9 @@ exports.getAlumniProfile = async(req,res,next)=>{
             data:{alumni}
         })
     } catch (error) {
-        next(error)
+        res.status(400).json({
+            error:error.message
+        })
     }
 }
 
@@ -646,10 +680,10 @@ exports.changePassword = async(req,res,next)=>{
         const data = {};
         
         //check if new password is given
-        if(!newPassword) return next(new AppError('Please provide a new password',400))
+        if(!newPassword) throw Error('Please provide a new password')
 
         //Check if new password is at least 5 characters long
-        if(newPassword.length < 5) return next(new AppError('Password must be at least five characters',400))
+        if(newPassword.length < 5) throw Error ('Password must be at least five characters')
 
         //encrypt password
         data.newPassword = await bcrypt.hash(newPassword, 8);
@@ -668,7 +702,9 @@ exports.changePassword = async(req,res,next)=>{
         })
 
     } catch (error) {
-        next(error)
+        res.status(400).json({
+            error:error.message
+        })
     }
 }
 
