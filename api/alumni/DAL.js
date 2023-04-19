@@ -497,7 +497,7 @@ class Alumni{
             const text = 
             `
             SELECT first_name, last_name, grandfather_name, gender, occupation, place_of_work, 
-            linkedIn, date_of_graduation FROM alumni
+            linkedIn, date_of_graduation, photo_url FROM alumni
             WHERE id = $1
             `
 
