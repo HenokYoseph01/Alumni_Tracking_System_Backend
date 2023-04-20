@@ -27,7 +27,6 @@ exports.createAlumniAccount = async(req,res,next)=>{
     try {
         //get uploaded list
         const list = await reader(req.file.path);
-
         //alumni created
         const alumni_created = [];
 
@@ -54,7 +53,7 @@ exports.createAlumniAccount = async(req,res,next)=>{
         //store password in data object
         data.password = await bcrypt.hash(password, 8);
         //Create alumni
-       // const alumni = await Admin.createAlumniAccount(data)
+        const alumni = await Admin.createAlumniAccount(data)
         //Send an email with the credentials and password to the alumni
         options.email = data.email,
         options.username = data.email,
@@ -62,12 +61,10 @@ exports.createAlumniAccount = async(req,res,next)=>{
         //Send Email
         await mailer(options);
         //Save in alumni_created_tab
-        //alumni_created.push(alumni)
+        alumni_created.push(alumni)
         
        }
-       //Delete file from file path
-        fs.unlinkSync(req.file.path)
-
+      
         //Response
         res.status(200).json({
             success: true,
@@ -76,6 +73,10 @@ exports.createAlumniAccount = async(req,res,next)=>{
         })
     } catch (error) {
         next(error)
+    }finally{
+         //Delete file from file path
+         fs.unlinkSync(req.file.path)
+
     }
 }
 

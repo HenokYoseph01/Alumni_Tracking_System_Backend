@@ -25,9 +25,9 @@ const config = {
         cl_apiKey: process.env.CLOUD_API_KEY,
         cl_apiSecret: process.env.CLOUD_API_SECRET
     },
-    sendgrid:{
-        api_key: process.env.MAILER_KEY,
-        sender: process.env.SENDER_ADDRESS
+    mailgun:{
+        api_key: process.env.MAILGUN_API_KEY,
+        domain: process.env.MAILGUN_DOMAIN
       }
 }
 
