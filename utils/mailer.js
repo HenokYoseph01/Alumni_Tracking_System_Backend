@@ -8,25 +8,38 @@ const config = require('../config')
 //Require App Error
 const AppError = require('./appError');
 
-//Require SendGrid
-const sgMailer = require('@sendgrid/mail')
+const formData = require('form-data');
+const Mailgun = require('mailgun.js');
+
+const API_KEY = config.mailgun.api_key;
+const DOMAIN = config.mailgun.domain;
+
+const mailgun = new Mailgun(formData);
+const client = mailgun.client({username: 'api', key: API_KEY});
 
 
-//Configure Send Grid Mailer
-sgMailer.setApiKey(config.sendgrid.api_key);
-
-//Creating actual mailing logic
+//Send mailgun
 const sendMailer = async(options)=>{
     try {
-        await sgMailer.send({
+        
+        const email = {
+            from: '"Alumni System" <aaualumnitracking@gmail.com>',
             to:options.email,
-            from: config.sendgrid.sender,
             subject: 'Alumni System Credentials',
             text: `Welcome to the start of our alumni tracking system, your credentials are:\nUsername:${options.username}\nPassword:${options.password}`
-        });
+        }
+        client.messages.create(DOMAIN, email)
+            .then((res) => {
+            console.log(res);
+            })
+            .catch((err) => {
+            console.error(err);
+            });
     } catch (error) {
-        return new AppError('Could not send email',500)
+        console.log(error)
     }
 }
+
+
 
 module.exports = sendMailer

@@ -200,7 +200,7 @@ exports.getAlumnus = async(req,res,next)=>{
 //Generate Report
 exports.generateReport = async(req,res,next)=>{
     try {
-        //Get data from body
+        //Get data from body //Change to id since this is a get endpoint
         const{
             batch
         } = req.body
