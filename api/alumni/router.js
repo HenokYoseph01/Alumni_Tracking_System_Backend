@@ -17,8 +17,10 @@ const allowedFileType = require('../../utils/allowedFileType')
 const alumniController = require('./controller');
 
 // Alumni routes
-router.post("/register",protect,allowedFileType('png','jpeg','jpg')
-            ,fileUploader.single('avatar'),alumniController.register,alumniController.uploadPhoto);
+router.post("/register",protect,alumniController.register,alumniController.uploadPhoto);
+
+router.post("/register/avatar",protect,allowedFileType('png','jpeg','jpg')
+,fileUploader.single('avatar'),alumniController.uploadPhoto);
 
 router.route('/')
 .get(protect,alumniController.getAlumniProfile)
