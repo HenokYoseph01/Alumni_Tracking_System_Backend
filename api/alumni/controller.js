@@ -67,7 +67,7 @@ exports.register = async(req,res,next)=>{
                 !attainment||
                 !category_of_work||
                 !satisfaction
-                ) throw Error('Please provide needed data')
+                ) throw Error(`Please provide needed data`)
 
                if(req.user.registered) throw Error('You have already registered');
                 //data variable to hold all data
@@ -76,17 +76,13 @@ exports.register = async(req,res,next)=>{
 
                 //call DAL
                 const register = await Alumni.register(data);
-
-                //Get alumni photo
-                const picture = req.file.path;
-
-                req.data = {
-                    register,
-                    picture
-                }
-             
-            //Move to next middleware
-              next();
+               
+             //Send response
+              res.status(200).json({
+                success:true,
+                message: 'Successfully Registered',
+                data:{register}
+                })
     } catch (error) {
         res.status(400).json({
             error:error.message
@@ -96,9 +92,10 @@ exports.register = async(req,res,next)=>{
 
 exports.uploadPhoto = async(req,res,next)=>{
     try {
-        
+         //Get alumni photo
+         const picture = req.file.path;
         //Upload file to cloudinary
-        cloudinary.uploader.upload(req.data.picture,{folder:`Alumni/${req.data.register.date_of_graduation}`})
+        cloudinary.uploader.upload(picture,{folder:`Alumni/${req.user.date_of_graduation}`})
         .then(result=>{
             const text = 
             `UPDATE alumni SET
@@ -109,17 +106,17 @@ exports.uploadPhoto = async(req,res,next)=>{
             pool.query({
                 name:'uploadPhoto',
                 text,
-                values:[result.secure_url,result.public_id,req.data.register.id]
+                values:[result.secure_url,result.public_id,req.user.id]
             }).then(data => {
                 const register = data.rows[0]
 
                 //Delete photo from file
-                fs.unlinkSync(req.data.picture)
-                
+                fs.unlinkSync(picture)
+
                  //Send response
                 res.status(200).json({
                 success:true,
-                message: 'Successfully Registered',
+                message: 'Successfully Uploaded Picture',
                 data:{register}
                 })
             }).catch(err=>{throw Error('Issue with registration')})
@@ -131,7 +128,7 @@ exports.uploadPhoto = async(req,res,next)=>{
         res.status(400).json({
             error:error.message
         })
-    }
+    } 
 }
 
 //Create Forum

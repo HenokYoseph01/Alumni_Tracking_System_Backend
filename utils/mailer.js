@@ -26,7 +26,7 @@ const sendMailer = async(options)=>{
             from: '"Alumni System" <aaualumnitracking@gmail.com>',
             to:options.email,
             subject: 'Alumni System Credentials',
-            text: `Welcome to the start of our alumni tracking system, your credentials are:\nUsername:${options.username}\nPassword:${options.password}`
+            text: `Welcome to the start of our alumni tracking system, your credentials are:\nUsername: ${options.username}\nPassword: ${options.password}`
         }
         client.messages.create(DOMAIN, email)
             .then((res) => {
