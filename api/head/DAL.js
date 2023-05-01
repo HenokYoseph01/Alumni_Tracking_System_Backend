@@ -501,7 +501,7 @@ class Head{
         try {
             //text
             const text = `
-            SELECT id, first_name, last_name, grandfather_name,GPA,occupation,date_of_graduation 
+            SELECT id, first_name, last_name, grandfather_name,GPA,occupation,date_of_graduation,department,phone_number,phone_number_alt,email 
             FROM alumni
             WHERE to_tsvector(COALESCE(first_name,' ')||' '||COALESCE(last_name,' ')||' '||COALESCE(grandfather_name,' ')||' '||
             GPA||COALESCE(occupation,' ')||' '||COALESCE(date_of_graduation,' ')) @@ plainto_tsquery($1)

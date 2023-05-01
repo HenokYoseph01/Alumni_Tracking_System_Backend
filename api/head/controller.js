@@ -281,7 +281,6 @@ exports.findSpecficItem = async(req,res,next)=>{
          const pageNum = page
 
         if(search && search!=='undefined:*' && search!==':*'){
-            console.log(search)
             outcome = await Head.searchAlumni(search)
         }else{
             console.log('two')
