@@ -199,19 +199,16 @@ class Head{
     }
 
     //Get Alumnus
-    static async getAllAlumnus(page){
+    static async getAllAlumnus(){
         try {
             //Text
             const text = `SELECT * from alumni 
-            ORDER BY "first_name", "last_name","grandfather_name"
-            LIMIT 10
-            OFFSET $1`
+            ORDER BY "first_name", "last_name","grandfather_name"`
 
             //Get Alumnus
             const {rows} = await pool.query({
                 name: 'get_all_alumnus',
-                text,
-                values:[page]
+                text
             });
             //return values
             return rows 
@@ -523,6 +520,7 @@ class Head{
         }
     }
 
+    
     //Update Head
     static async updateHead(data){
         try {
