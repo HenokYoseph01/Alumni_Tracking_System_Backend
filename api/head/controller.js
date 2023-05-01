@@ -188,7 +188,7 @@ exports.getAlumnus = async(req,res,next)=>{
         const pageNum = page
         
         //Get Alumnus
-        const alumnus = await Head.getAllAlumnus((page-1)*10);
+        const alumnus = await Head.getAllAlumnus();
 
         //Response
         res.status(200).json({
