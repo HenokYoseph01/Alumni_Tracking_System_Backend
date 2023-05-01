@@ -13,6 +13,11 @@ const createToken = require('../../utils/createToken');
 //Require write excel
 const writeExcel = require('../../utils/writeReport');
 
+//For dowloading files
+const https = require('https');
+const fs = require('fs');
+const path = require('path');
+
 
 
 //Get all Events
@@ -208,7 +213,7 @@ exports.generateReport = async(req,res,next)=>{
         if(!batch) return next(new AppError('Please provide batch',400))
 
         //Prepare file name
-        const file_name = batch + ` report.xlsx`;
+        const file_name = batch + `_report.xlsx`;
 
         //Generate the report
         const report = await Head.generateReport(batch);
@@ -218,16 +223,31 @@ exports.generateReport = async(req,res,next)=>{
         
         //Generate Excel file
          await writeExcel(data);
+        
+        //Download the file onto local system
+        const pathname = path.join(process.cwd(),`/files/${file_name}`);
+        
+        req.file_name = file_name
+        req.pathname = pathname
+        next()
+    } catch (error) {
+        next(error)
+    }
+}
 
-        //Response
-        res.status(200).json({
-            status: "SUCCESS",
-            message: "The report has been successfully created",
-            data:{
-                report
-            }
-        })
-
+exports.download = async(req,res,next)=>{
+    try {
+        res.download(
+            req.pathname,
+            req.file_name,
+            (err) => {
+                if (err) {
+                    res.send({
+                        error : err,
+                        msg   : "Problem downloading the file"
+                    })
+                }
+        });
     } catch (error) {
         next(error)
     }
