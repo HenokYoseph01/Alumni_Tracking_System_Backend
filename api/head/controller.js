@@ -274,16 +274,21 @@ exports.getHeadProfile = async(req,res,next)=>{
 exports.findSpecficItem = async(req,res,next)=>{
     try {
         let outcome;
-        const categories = req.body.categories
-        const search = req.body.search + ':*'
+        const search = req.query.search + ':*'
          //Page
          let page = req.query.page
          if(!page) page = 1;
          const pageNum = page
 
-        if(search){
-            outcome = await Head.searchAlumni(search,(page-1)*10)
+        if(search && search!=='undefined:*' && search!==':*'){
+            console.log(search)
+            outcome = await Head.searchAlumni(search)
+        }else{
+            console.log('two')
+            outcome = await Head.getAllAlumnus();
         }
+            
+            
 
         //Response
         res.status(200).json({
