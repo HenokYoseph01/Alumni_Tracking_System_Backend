@@ -497,21 +497,20 @@ class Head{
     }
 
     //Search Specfic Alumni(s)
-    static async searchAlumni(data,page){
+    static async searchAlumni(data){
         try {
             //text
             const text = `
             SELECT id, first_name, last_name, grandfather_name,GPA,occupation,date_of_graduation 
             FROM alumni
             WHERE to_tsvector(COALESCE(first_name,' ')||' '||COALESCE(last_name,' ')||' '||COALESCE(grandfather_name,' ')||' '||
-            GPA||COALESCE(occupation,' '))||' '||date_of_graduation @@ to_tsquery($1)
-            LIMIT 10
-            OFFSET $2`
+            GPA||COALESCE(occupation,' ')||' '||COALESCE(date_of_graduation,' ')) @@ plainto_tsquery($1)
+            `
 
             const{rows} = await pool.query({
                 name: 'search_alumni',
                 text,
-                values:[data,page]
+                values:[data]
             })
             //return value
             return rows;
