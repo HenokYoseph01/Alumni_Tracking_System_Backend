@@ -31,7 +31,7 @@ router.route('/event/:eventId')
 .delete(protect,authorize('Head'),headController.deleteSingleEvent)
 
 router.get('/alumni',protect,authorize('Head'),headController.getAlumnus)
-router.post('/generatereport',protect,authorize('Head'),headController.generateReport)
+router.post('/generatereport',protect,authorize('Head'),headController.generateReport,headController.download)
 
 router.get('/specific',protect,authorize('Head'),headController.findSpecficItem)
 
