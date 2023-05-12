@@ -15,6 +15,7 @@ const fileUploader = require('../../utils/fileUploader')
 const allowedFileType = require('../../utils/allowedFileType')
 
 router.route('/alumniaccount').post(allowedFileType('xlsx','xls','xml'),fileUploader.single('list'),adminController.createAlumniAccount);
+router.route('/alumniaccountmanual').post(adminController.createAlumniAccountManually)
 router.route('/headaccount').post(adminController.createHeadAccount)
 router.route('/adminaccount').post(adminController.createAdminAccount)
 router.route('/')

@@ -80,6 +80,53 @@ exports.createAlumniAccount = async(req,res,next)=>{
     }
 }
 
+//Create Alumni Account Manually
+exports.createAlumniAccountManually = async(req,res,next)=>{
+    try {
+        //Get required body
+        const {
+            first_name, 
+            last_name, 
+            grandfather_name, 
+            gender, 
+            gpa, 
+            graduation_year, 
+            email,
+            department 
+        } = req.body
+
+        //Create email option
+        const options = {}
+        
+        //create random password for alumni account
+         const password = otp.generate(5,{lowerCaseAlphabets:false,upperCaseAlphabets:false,specialChars:false});
+        console.log(password)
+         //Encrypt Password 
+         req.body.password = await bcrypt.hash(password, 8);
+
+        //Create account
+        const alumni = await Admin.createAlumniAccount(req.body)
+
+        //Email
+        options.email = email,
+        options.username = email,
+        options.password = password 
+        //Send Email
+        await mailer(options);
+
+        //Send Response
+        res.status(200).json({
+            success: true,
+            message: 'SUCCESSFULLY CREATED THE ACCOUNT',
+            data: {alumni}
+        })
+
+    } catch (error) {
+        res.status(400).json({
+            error:error.message
+        })
+    }
+}
 
 //Create Head Account
 exports.createHeadAccount = async(req,res,next)=>{
@@ -123,6 +170,7 @@ exports.createHeadAccount = async(req,res,next)=>{
         next(error)
     }
 }
+
 
 //Create Admin Account
 exports.createAdminAccount = async(req,res,next)=>{
