@@ -374,3 +374,23 @@ exports.deletePost = async(req,res,next)=>{
         next(error)
     }
 }
+
+exports.getAlumniInfo = async(req,res,next)=>{
+    try {
+        //Get alumni information
+        const alumni = await Admin.getSingleAlumni(req.params.alumniId)
+
+        //Get banned property
+        const banned = alumni.banned;
+
+        //Response
+        res.status(200).json({
+            status: "SUCCESS",
+            data:{banned}
+        })
+    } catch (error) {
+        res.status(400).json({
+            error:error.message
+        })
+    }
+}
