@@ -224,7 +224,7 @@ class Admin{
             //Query
             const text =
              `
-            SELECT f.id as "forum_id",a.id as "alumni_id",f.title, ar.author_name, ar.reporter_name, ar.description, a.report_warnings
+            SELECT f.id as "forum_id",a.id as "alumni_id",f.title, ar.author_name, ar.reporter_name, ar.description, a.report_warnings, a.banned
             FROM alumni_report as ar
             INNER JOIN forum as f ON ar.forum_id = f.id
             INNER JOIN alumni as a ON f.author_id = a.id
