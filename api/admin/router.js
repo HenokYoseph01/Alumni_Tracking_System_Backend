@@ -21,6 +21,7 @@ router.route('/adminaccount').post(adminController.createAdminAccount)
 router.route('/')
 .get(protect,adminController.getAdmin)
 .patch(protect,adminController.updateAdmin)
+router.route('/alumni/:alumniId').get(adminController.getAlumniInfo)
 
 router.get('/moderation',protect,adminController.getModerationList)
 router.get('/moderation/:forumId',protect,adminController.getPost)
