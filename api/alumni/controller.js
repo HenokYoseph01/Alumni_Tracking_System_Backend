@@ -181,7 +181,9 @@ exports.getAllForum = async(req,res,next)=>{
             data:{forums}
         })
     } catch (error) {
-        next(error)
+        res.status(400).json({
+            error:error.message
+        })
     }
 }
 
