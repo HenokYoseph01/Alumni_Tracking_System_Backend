@@ -99,7 +99,7 @@ exports.createAlumniAccountManually = async(req,res,next)=>{
         const options = {}
         
         //create random password for alumni account
-         const password = otp.generate(5,{lowerCaseAlphabets:false,upperCaseAlphabets:false,specialChars:false});
+        const password = otp.generate(5,{lowerCaseAlphabets:false,upperCaseAlphabets:false,specialChars:false});
         console.log(password)
          //Encrypt Password 
          req.body.password = await bcrypt.hash(password, 8);
@@ -141,6 +141,9 @@ exports.createHeadAccount = async(req,res,next)=>{
             department
         }=req.body;
 
+        //Create email option
+        const options = {}
+
         //Check if all details are provided
         if(!first_name||
             !last_name||
@@ -157,6 +160,14 @@ exports.createHeadAccount = async(req,res,next)=>{
 
         //Create head
         const head = await Admin.createHeadAccount(req.body);
+
+        //Email
+        options.email = email,
+        options.username = email,
+        options.password = password 
+        //Send Email
+        await mailer(options);
+
 
         //send response
         res.status(200).json({
@@ -184,6 +195,10 @@ exports.createAdminAccount = async(req,res,next)=>{
             email
         }=req.body;
 
+        //Create email option
+        const options = {}
+
+
         //Check if all details are provided
         if(!first_name||
             !last_name||
@@ -199,6 +214,13 @@ exports.createAdminAccount = async(req,res,next)=>{
 
         //Create head
         const admin = await Admin.createAdminAccount(req.body);
+
+        //Email
+        options.email = email,
+        options.username = email,
+        options.password = password 
+        //Send Email
+        await mailer(options);
 
         //send response
         res.status(200).json({
