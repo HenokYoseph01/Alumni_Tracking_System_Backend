@@ -13,6 +13,9 @@ const createToken = require('../../utils/createToken');
 //Require write excel
 const writeExcel = require('../../utils/writeReport');
 
+//Require batch write excel
+const writeExcelAll = require('../../utils/writeReportAll')
+
 //For dowloading files
 const https = require('https');
 const fs = require('fs');
@@ -210,19 +213,33 @@ exports.generateReport = async(req,res,next)=>{
             batch
         } = req.body
 
+        //Create container to hold data if user picks all
+        const allData = [];
         if(!batch) return next(new AppError('Please provide batch',400))
 
         //Prepare file name
         const file_name = batch + `_report.xlsx`;
+        if(batch === 'all'){
+            const batch = await Head.getBatches()
+            
+            for(const x of batch){
+                 allData.push(await Head.generateReport(x.date_of_graduation));
+            }
 
-        //Generate the report
-        const report = await Head.generateReport(batch);
-        const data = {}
-        data.report = report;
-        data.file_name = file_name;
-        
-        //Generate Excel file
-         await writeExcel(data);
+            await writeExcelAll(allData,file_name)
+            
+            
+        }else{
+              //Generate the report
+            const report = await Head.generateReport(batch);
+            const data = {}
+            data.report = report;
+            data.file_name = file_name;
+            
+            //Generate Excel file
+            await writeExcel(data);
+        }
+      
         
         //Download the file onto local system
         const pathname = path.join(process.cwd(),`/files/${file_name}`);
