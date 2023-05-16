@@ -553,6 +553,26 @@ class Head{
             throw error
         }
     }
+
+    //Get batches
+    static async getBatches(data){
+        try {
+            //query
+            const text = 
+            `SELECT DISTINCT date_of_graduation FROM alumni ORDER BY date_of_graduation
+            `
+            const {rows} = await pool.query({
+                name:'get_batch',
+                text
+            })
+
+            //Return values
+            return rows
+        } catch (error) {
+            throw error
+        }
+    }
+
 }
 
 module.exports = Head;
