@@ -213,6 +213,7 @@ exports.generateReport = async(req,res,next)=>{
             batch
         } = req.body
 
+        console.log(batch)
         //Create container to hold data if user picks all
         const allData = [];
         if(!batch) return next(new AppError('Please provide batch',400))
@@ -244,7 +245,7 @@ exports.generateReport = async(req,res,next)=>{
         //Download the file onto local system
         const pathname = path.join(process.cwd(),`/files/${file_name}`);
         
-        req.file_name = file_name
+        console.log(file_name, pathname)
         req.pathname = pathname
         next()
     } catch (error) {
@@ -255,16 +256,9 @@ exports.generateReport = async(req,res,next)=>{
 exports.download = async(req,res,next)=>{
     try {
         res.download(
-            req.pathname,
-            req.file_name,
-            (err) => {
-                if (err) {
-                    res.send({
-                        error : err,
-                        msg   : "Problem downloading the file"
-                    })
-                }
-        });
+            req.pathname
+            );
+        fs.unlink(req.pathname);
     } catch (error) {
         next(error)
     }
