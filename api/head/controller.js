@@ -258,7 +258,6 @@ exports.download = async(req,res,next)=>{
         res.download(
             req.pathname
             );
-        fs.unlink(req.pathname);
     } catch (error) {
         next(error)
     }
