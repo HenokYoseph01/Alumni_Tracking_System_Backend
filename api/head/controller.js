@@ -255,10 +255,13 @@ exports.generateReport = async(req,res,next)=>{
 
 exports.download = async(req,res,next)=>{
     try {
+        console.log(req.pathname)
+
         res.download(
             req.pathname
             );
     } catch (error) {
+        console.log(error.message)
         next(error)
     }
 }
