@@ -13,6 +13,9 @@ const headController = require('./controller');
 //Authorization
 const authorize = require('../authorization');
 
+//File uploader
+const upload = require('../../utils/cloudinaryUpload')
+
 //Routers
 
 
@@ -31,7 +34,7 @@ router.route('/event/:eventId')
 .delete(protect,authorize('Head'),headController.deleteSingleEvent)
 
 router.get('/alumni',protect,authorize('Head'),headController.getAlumnus)
-router.post('/generatereport',headController.generateReport,headController.download)
+router.post('/generatereport',upload.single('report'),headController.generateReport,headController.download)
 
 router.get('/specific',protect,authorize('Head'),headController.findSpecficItem)
 

@@ -21,6 +21,12 @@ const https = require('https');
 const fs = require('fs');
 const path = require('path');
 
+//Require multer
+const multer = require('multer')
+
+//Require cloundinary
+const cloundinary = require('../../utils/cloudinary')
+
 
 
 //Get all Events
@@ -241,12 +247,23 @@ exports.generateReport = async(req,res,next)=>{
             await writeExcel(data);
         }
       
+        // Upload
+        const upload = multer({
+            storage: multer.diskStorage({}),
+            limits: { fileSize: 5 * 1024 * 1024 }, // File size limit: 5MB
+            fileFilter: function (req, file, callBack) {
+            checkFileType(req, file, callBack);
+            },
+        });
         
         //Download the file onto local system
         const pathname = path.join(process.cwd(),`/files/${file_name}`);
-        
-        console.log(file_name, pathname)
-        req.pathname = pathname
+        const newFile = file_name.split(".")[0] + ".png";
+        const file = await cloundinary.uploader.upload(pathname,{
+            folder:"Reports",
+            resource_type: 'raw'
+        })
+        req.pathname = file.secure_url
         next()
     } catch (error) {
         next(error)
@@ -256,8 +273,7 @@ exports.generateReport = async(req,res,next)=>{
 exports.download = async(req,res,next)=>{
     try {
         console.log(req.pathname)
-
-        res.download(
+        res.send(
             req.pathname
             );
     } catch (error) {
