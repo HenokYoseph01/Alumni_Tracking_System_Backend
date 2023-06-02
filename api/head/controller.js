@@ -273,8 +273,10 @@ exports.generateReport = async(req,res,next)=>{
 exports.download = async(req,res,next)=>{
     try {
         console.log(req.pathname)
-        res.send(
-            req.pathname
+        res.json({
+            image: req.pathname
+
+        }
             );
     } catch (error) {
         console.log(error.message)
