@@ -25,9 +25,9 @@ const config = {
         cl_apiKey: process.env.CLOUD_API_KEY,
         cl_apiSecret: process.env.CLOUD_API_SECRET
     },
-    mailgun:{
-        api_key: process.env.MAILGUN_API_KEY,
-        domain: process.env.MAILGUN_DOMAIN
+    mailer:{
+        user: process.env.MAILTRAP_USER,
+        password: process.env.MAILTRAP_PASSWORD
       }
 }
 
