@@ -114,7 +114,7 @@ exports.updateEvent = async(req,res,next)=>{
         //Get event id
         const eventId = req.params.eventId;
 
-        //Check if there are any events to delete
+        //Check if there are any events to update
         const getEvent = await Head.getSingleEvent(eventId);
 
         //check if there are any events
@@ -144,6 +144,7 @@ exports.deleteAllEvent = async(req,res,next)=>{
         //Check if there are any events to delete
         const getEvents = await Head.getAllEvent();
 
+        console.log(getEvents.length)
         //check if there are any events
         if(getEvents.length===0) return next(new AppError('No Events to delete',400));
 
