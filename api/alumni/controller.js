@@ -753,3 +753,23 @@ exports.changePassword = async(req,res,next)=>{
     }
 }
 
+//Get full alumni information
+exports.getFullAlumniInfo = async(req,res,next)=>{
+    try {
+        //Get alumni id
+        const id = req.user.id;
+        //Get alumni data
+        const alumni = await Alumni.getAlumniDataFull(id)
+
+        //Response
+        res.status(200).json({
+            status:"SUCCESS",
+            data:{alumni}
+        })
+    } catch (error) {
+        res.status(400).json({
+            error:error.message
+        })
+    }
+}
+

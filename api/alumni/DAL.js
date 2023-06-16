@@ -663,6 +663,26 @@ class Alumni{
     }
    }
 
+   //Get full alumni information
+   static async getAlumniDataFull(id){
+    try {
+        //Query
+        const text = `SELECT * FROM alumni WHERE id=$1`
+
+        //Manipulate database
+        const {rows} = await pool.query({
+            name:'get_all_alumni_info',
+            text,
+            values:[id]
+        })
+        //Return data
+        return rows[0]
+    } catch (error) {
+        throw error
+    }
+}
+
+
 }
 
 

@@ -58,6 +58,7 @@ router.post('/forum/report/:forumId',protect,alumniController.reportForum);
 
 router.get('/event',protect,alumniController.getAllEvents)
 router.get('/event/:eventId',protect,alumniController.getSingleEvent)
+router.get('/full',protect,alumniController.getFullAlumniInfo)
 
 //Export router
 module.exports = router
