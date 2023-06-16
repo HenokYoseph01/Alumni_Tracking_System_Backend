@@ -20,7 +20,8 @@ const cloudinary = require('../../utils/cloudinary');
 const fs = require('fs');
 
 //Require Bycrpt
-const bcrypt = require('bcrypt')
+const bcrypt = require('bcrypt');
+const { picture } = require('../../utils/cloudinary');
 
 //Alumni Controllers
 
@@ -129,6 +130,51 @@ exports.uploadPhoto = async(req,res,next)=>{
             error:error.message
         })
     } 
+}
+
+//Update profile picture
+exports.updateProfilePicture = async(req,res,next)=>{
+    try {
+    //Get id of user
+    const id = req.user.id;
+    //Get file
+    const picture = req.file.path;    
+    // Update an image on Cloudinary
+    cloudinary.uploader.upload(picture,{folder:`Alumni/${req.user.date_of_graduation}`
+    , public_id:req.user.public_id})
+    .then(result=>{
+        const text = 
+        `UPDATE alumni SET
+         photo_url = COALESCE($1,photo_url),
+         photo_public_id = COALESCE($2, photo_public_id)
+         WHERE id = $3 RETURNING *
+        `
+        pool.query({
+            name:'uploadPhoto',
+            text,
+            values:[result.secure_url,result.public_id,req.user.id]
+        }).then(data => {
+            const register = data.rows[0]
+
+            //Delete photo from file
+            fs.unlinkSync(picture)
+
+             //Send response
+            res.status(200).json({
+            success:true,
+            message: 'Successfully Uploaded Picture',
+            data:{register}
+            })
+        }).catch(err=>{throw Error('Issue with updating picture')})
+      
+        
+    }).catch(err=> {throw Error('Problem with uploading picture')})
+    
+    } catch (error) {
+        res.status(400).json({
+            error:error.message
+        })
+    }
 }
 
 //Create Forum
