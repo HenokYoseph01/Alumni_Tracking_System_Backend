@@ -168,7 +168,7 @@ class Alumni{
                 name:'get_single_alumni_profile',
                 text: `
                 SELECT id, first_name, last_name, grandfather_name, place_of_work, occupation,
-                GPA, phone_number,email, gender, date_of_graduation, photo_url, registered
+                GPA, phone_number,email, gender, date_of_graduation, photo_url, linkedIn,registered
                  FROM alumni WHERE id = $1`,
                 values:[data]
             })
