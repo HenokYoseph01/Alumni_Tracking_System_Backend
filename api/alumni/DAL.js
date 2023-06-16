@@ -665,20 +665,42 @@ class Alumni{
 
    //Get full alumni information
    static async getAlumniDataFull(id){
+    //Multitransactional query
+    const client = await pool.connect();
     try {
+        //Address
+        const addressText = `SELECT * FROM address WHERE id=$1`
+
+        const address = await client.query({
+            name:'get_full_address',
+            text:addressText,
+            values:[id]
+        })
+
         //Query
         const text = `SELECT * FROM alumni WHERE id=$1`
 
         //Manipulate database
-        const {rows} = await pool.query({
+        const {rows} = await client.query({
             name:'get_all_alumni_info',
             text,
             values:[id]
         })
+        
+        //Get both data result
+        const alumniInfo = rows[0]
+        const alumniAddress = address.rows[0]
+        const finalInfo = {...alumniInfo,...alumniAddress}
+        //Aggregate the two table results into one object
+        const data = {
+            finalInfo
+        }
         //Return data
-        return rows[0]
+        return data
     } catch (error) {
         throw error
+    }finally{
+        client.release()
     }
 }
 
