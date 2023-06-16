@@ -22,9 +22,13 @@ router.post("/register",protect,alumniController.register,alumniController.uploa
 router.post("/register/avatar",protect,allowedFileType('png','jpeg','jpg')
 ,fileUploader.single('avatar'),alumniController.uploadPhoto);
 
+
 router.route('/')
 .get(protect,alumniController.getAlumniProfile)
 .patch(protect,alumniController.updateProfle)
+
+router.route('/profile/avatar').patch(protect,allowedFileType('png','jpeg','jpg'),
+fileUploader.single('avatar'),alumniController.updateProfilePicture)
 
 router.patch('/changepassword',protect,alumniController.changePassword)
 
