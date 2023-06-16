@@ -37,6 +37,7 @@ router.get('/alumni',protect,authorize('Head'),headController.getAlumnus)
 router.post('/generatereport',upload.single('report'),headController.generateReport,headController.download)
 
 router.get('/specific',protect,authorize('Head'),headController.findSpecficItem)
+router.patch('/changePassword',protect,headController.changeHeadPassword)
 
 //Export router
 module.exports = router

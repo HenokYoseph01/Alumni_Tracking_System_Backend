@@ -573,6 +573,33 @@ class Head{
         }
     }
 
+    //Change password
+   static async changePasswordHead(data){
+    try {
+        //change password text
+        const text = 
+        `
+        UPDATE account SET
+        password = $1
+        WHERE id = $2
+        RETURNING *
+        `
+        //Execute query
+        const {rows} = await pool.query({
+            name: 'update_password_head',
+            text,
+            values:[
+                data.newPassword,
+                data.accountId
+            ]
+        })
+        //return value
+        return rows[0]
+    } catch (error) {
+        throw error
+    }
+   }
+
 }
 
 module.exports = Head;

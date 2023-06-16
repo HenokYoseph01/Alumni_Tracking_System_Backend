@@ -415,4 +415,40 @@ exports.getAlumniInfo = async(req,res,next)=>{
             error:error.message
         })
     }
+}//Change password
+exports.changeAdminPassword = async(req,res,next)=>{
+    try {
+        //Get new password from body
+        const newPassword = req.body.newPassword
+
+        //Create data object to hold all parameters for DAL
+        const data = {};
+        
+        //check if new password is given
+        if(!newPassword) throw Error('Please provide a new password')
+
+        //Check if new password is at least 5 characters long
+        if(newPassword.length < 5) throw Error ('Password must be at least five characters')
+
+        //encrypt password
+        data.newPassword = await bcrypt.hash(newPassword, 8);
+
+        //Get users account id and store it in data object
+        data.accountId = req.user.account;
+
+        //Change password
+        const changedPassword = await Admin.changePasswordAdmin(data);
+
+
+        //Response
+        res.status(200).json({
+            status:"SUCCESS",
+            message:"Password has been changed, please login again"
+        })
+
+    } catch (error) {
+        res.status(400).json({
+            error:error.message
+        })
+    }
 }
