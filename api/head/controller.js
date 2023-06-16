@@ -16,6 +16,9 @@ const writeExcel = require('../../utils/writeReport');
 //Require batch write excel
 const writeExcelAll = require('../../utils/writeReportAll')
 
+//Require Bycrpt
+const bcrypt = require('bcrypt');
+
 //For dowloading files
 const https = require('https');
 const fs = require('fs');
@@ -353,5 +356,43 @@ exports.updateHead = async(req,res,next)=>{
         })
     } catch (error) {
         next(error)
+    }
+}
+
+//Change password
+exports.changeHeadPassword = async(req,res,next)=>{
+    try {
+        //Get new password from body
+        const newPassword = req.body.newPassword
+
+        //Create data object to hold all parameters for DAL
+        const data = {};
+        
+        //check if new password is given
+        if(!newPassword) throw Error('Please provide a new password')
+
+        //Check if new password is at least 5 characters long
+        if(newPassword.length < 5) throw Error ('Password must be at least five characters')
+
+        //encrypt password
+        data.newPassword = await bcrypt.hash(newPassword, 8);
+
+        //Get users account id and store it in data object
+        data.accountId = req.user.account;
+
+        //Change password
+        const changedPassword = await Head.changePasswordHead(data);
+
+
+        //Response
+        res.status(200).json({
+            status:"SUCCESS",
+            message:"Password has been changed, please login again"
+        })
+
+    } catch (error) {
+        res.status(400).json({
+            error:error.message
+        })
     }
 }

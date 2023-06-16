@@ -346,6 +346,33 @@ class Admin{
         }
     }
 
+    //Change password
+   static async changePasswordAdmin(data){
+    try {
+        //change password text
+        const text = 
+        `
+        UPDATE account SET
+        password = $1
+        WHERE id = $2
+        RETURNING *
+        `
+        //Execute query
+        const {rows} = await pool.query({
+            name: 'update_password_admin',
+            text,
+            values:[
+                data.newPassword,
+                data.accountId
+            ]
+        })
+        //return value
+        return rows[0]
+    } catch (error) {
+        throw error
+    }
+   }
+
 
 
 }
