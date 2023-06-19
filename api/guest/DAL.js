@@ -47,7 +47,8 @@ class Guest{
             const text = `SELECT id, first_name, 
             last_name,grandfather_name,photo_url 
             FROM alumni
-            WHERE date_of_graduation = $1`
+            WHERE date_of_graduation = $1
+            ORDER BY first_name, last_name, grandfather_name`
             //Get event
             const {rows} = await pool.query({
                 name:'get_alumni_public',
