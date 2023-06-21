@@ -28,6 +28,7 @@ router.get('/moderation/:forumId',protect,adminController.getPost)
 router.get('/moderation/warning/:alumniId',protect,adminController.giveWarning)
 router.get('/moderation/ban/:alumniId',protect,adminController.banAlumni)
 router.delete('/moderation/delete/:forumId',protect,adminController.deletePost)
+router.delete('/moderation/skip/:reportId',protect,adminController.skipReport)
 router.patch('/changePassword',protect,adminController.changeAdminPassword)
 
 
