@@ -452,3 +452,23 @@ exports.changeAdminPassword = async(req,res,next)=>{
         })
     }
 }
+
+exports.skipReport = async(req,res,next)=>{
+    try {
+        //Get the id of the report
+        const reportId = req.params.reportId;
+
+        //Delete the report from the table
+        await Admin.skipReport(reportId);
+
+        //Response
+        res.status(200).json({
+            status:"SUCCESS",
+            message:"Successfully skipped the report"
+        })
+    } catch (error) {
+        res.status(400).json({
+            error:error.message
+        })
+    }
+}
